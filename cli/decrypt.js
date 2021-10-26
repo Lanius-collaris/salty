@@ -84,7 +84,7 @@ module.exports = function (inFile, outFile, options) {
             throw new Error('invalid PEM')
           }
           var tmpStream = through()
-          decryptor = decrypt(tmpStream, wallet, pem.body.length, !options.translate)
+          decryptor = decrypt(tmpStream, wallet, pem.body.length, !options.translate, options.parent.wallet)
           withDecryptor(decryptor)
           tmpStream.end(pem.body)
         })
@@ -107,7 +107,7 @@ module.exports = function (inFile, outFile, options) {
       else {
         withOutfile()
         outStream = fs.createWriteStream(outFile, {mode: parseInt('0600', 8)})
-        decryptor = decrypt(inStream, wallet, inStat.size, !options.translate)
+        decryptor = decrypt(inStream, wallet, inStat.size, !options.translate, options.parent.wallet)
         withDecryptor(decryptor)
         var bar = new Progress('  decrypting [:bar] :percent ETA: :etas', { total: inStat.size, width: 80 })
         var chunkCounter = 0
