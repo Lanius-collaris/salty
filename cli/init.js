@@ -81,6 +81,10 @@ module.exports = function (options) {
       var str = wallet.toPEM(info.passphrase)
       fs.writeFileSync(path.join(walletDir, 'id_salty'), str + '\n', {mode: parseInt('0600', 8)})
       fs.writeFileSync(path.join(walletDir, 'id_salty.pub'), wallet.pubkey.toString() + '\n', {mode: parseInt('0644', 8)})
+
+      let noncePath=path.join(walletDir, 'nonce')//这里记录了已收到的消息的nonce
+      if(fs.existsSync(noncePath)) fs.rmSync(noncePath)
+
       if (isUpdate) {
         console.log('\nWallet updated at ' + walletDir)
       }
